@@ -1,5 +1,5 @@
 import random
-from scenes import create_scene, subscene
+from .scenes import create_scene, subscene
 
 def sub(indices):
     def closure(names):

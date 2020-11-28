@@ -1,5 +1,5 @@
 from moviepy.editor import clips_array
-from config import width, height
+from .config import width, height
 
 def create_scene(clips, clip_names, root_size = (width, height)):
     root_width, root_height = root_size
