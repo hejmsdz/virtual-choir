@@ -28,7 +28,7 @@ def get_video_tracks(reaper_path, video_root):
     tracks = filter(is_track, project.children)
     for track in tracks:
         name = track.find('NAME')[1]
-        if name in MASTER_TRACKS:
+        if name in MASTER_TRACKS or '--' in name:
             continue
         norm_name = normalize(name)
         position = track.find('ITEM/POSITION')[1]
