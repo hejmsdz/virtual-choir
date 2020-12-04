@@ -12,7 +12,7 @@ def interpret_clip(clips, name, tile_size):
 def create_scene(clips, clip_names, root_size = (width, height)):
     root_width, root_height = root_size
     split = len(clip_names)
-    tile_size = root_width / split, root_height / split
+    tile_size = root_width // split, root_height // split
     scene_clips = [
         [
             interpret_clip(clips, name, tile_size)
