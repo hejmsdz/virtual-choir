@@ -1,5 +1,13 @@
-from moviepy.editor import clips_array, concatenate_videoclips
+from moviepy.editor import ColorClip, clips_array, concatenate_videoclips
 from .config import width, height, fade
+
+def interpret_clip(clips, name, tile_size):
+    if type(name) == str:
+        return clips[name].resize(tile_size)
+    elif callable(name):
+        return name(clips, tile_size)
+    else:
+        return ColorClip(tile_size, (0, 0, 0))
 
 def create_scene(clips, clip_names, root_size = (width, height)):
     root_width, root_height = root_size
@@ -7,12 +15,7 @@ def create_scene(clips, clip_names, root_size = (width, height)):
     tile_size = root_width / split, root_height / split
     scene_clips = [
         [
-            (
-            clips[name].resize(tile_size)
-            if type(name) == str
-            else
-            name(clips, tile_size) # subscene
-            )
+            interpret_clip(clips, name, tile_size)
             for name
             in row
         ]
