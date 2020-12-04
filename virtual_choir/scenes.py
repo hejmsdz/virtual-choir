@@ -1,4 +1,4 @@
-from moviepy.editor import ColorClip, clips_array, concatenate_videoclips
+from moviepy.editor import ColorClip, CompositeVideoClip, clips_array, concatenate_videoclips
 from .config import width, height, fade
 
 def interpret_clip(clips, name, tile_size):
@@ -23,6 +23,26 @@ def create_scene(clips, clip_names, root_size = (width, height)):
         in clip_names
     ]
     return clips_array(scene_clips).resize(root_size)
+
+def span(row_range, col_range, name):
+    row, rows = row_range
+    col, cols = col_range
+    def closure(clips, size, split):
+        width, height = size
+        clip = clips[name]
+        x = (row / split) * width
+        y = (col / split) * height
+        w = (rows / split) * width
+        h = (cols / split) * height
+        return clip.resize((w, h)).set_position((x, y))
+    return closure
+
+def create_superscene(clips, clip_names, spans, root_size = (width, height)):
+    base_scene = create_scene(clips, clip_names, root_size)
+    split = len(clip_names)
+    span_clips = [span(clips, root_size, split) for span in spans]
+    return CompositeVideoClip([base_scene] + span_clips)
+
 
 def subscene(clip_names):
     def closure(clips, size):
