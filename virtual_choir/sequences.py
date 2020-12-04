@@ -6,11 +6,18 @@ def sub(indices):
         return subscene(from_indices(indices, names))
     return closure
 
+def interpret_index(index, names):
+    if type(index) == int:
+        return names[index]
+    elif callable(index):
+        return index(names)
+    else:
+        return None
+
 def from_indices(indices, names):
     return [
         [
-            names[index] if type(index) == int
-            else index(names)
+            interpret_index(index, names)
             for index
             in row
         ]
